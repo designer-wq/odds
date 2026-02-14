@@ -3,7 +3,7 @@
  * With TheSportsDB API integration for team logos
  */
 import { renderCanvas, formatDate } from './canvas-renderer.js';
-import { searchLocalTeams } from './teams-store.js';
+import { searchLocalTeams, addTeam, getTeams } from './teams-store.js';
 import bgStadiumUrl from './assets/bg-stadium.png';
 
 // ===== CONFIG =====
@@ -479,6 +479,15 @@ function renderSuggestions(container, teams, gameIndex, teamSide) {
 async function selectTeam(team, gameIndex, teamSide, container) {
     const game = state.games[gameIndex];
     if (!game) return;
+
+    // Auto-save API team to local store (if not already local)
+    if (!team.isLocal && team.badge) {
+        const existing = getTeams();
+        const alreadySaved = existing.some(t => t.name === team.name || t.badge === team.badge);
+        if (!alreadySaved) {
+            addTeam(team.name, team.badge);
+        }
+    }
 
     // Set team name
     if (teamSide === 'a') {
