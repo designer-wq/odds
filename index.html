@@ -49,53 +49,68 @@
           <textarea id="artTitle" rows="2" placeholder="JOGOS DO DIA">JOGOS DO DIA</textarea>
         </div>
 
-        <!-- Background image -->
+        <!-- Campeonato (BG + Tema sincronizados) -->
         <div class="bg-section">
-          <label>Imagem de Fundo</label>
-          <div class="bg-img-options" id="bgImgOptions">
-            <button class="bg-img-option active" data-bgimg="none" title="Sem imagem">
-              <span class="bg-img-none">✕</span>
+          <label>Campeonato</label>
+          <div class="championship-grid" id="championshipGrid">
+            <button class="champ-btn active" data-champ="brasileirao" title="Brasileirão"
+              style="--champ-color: linear-gradient(135deg, #003d12, #f7d731)">
+              <span class="champ-name">Brasileirão</span>
             </button>
-            <button class="bg-img-option" data-bgimg="stadium" title="Estádio">
-              <img src="./assets/bg-stadium.png" alt="Estádio" />
+            <button class="champ-btn" data-champ="paulista" title="Campeonato Paulista"
+              style="--champ-color: linear-gradient(135deg, #2d0a0a, #e02020)">
+              <span class="champ-name">Paulista</span>
             </button>
-            <label class="bg-img-option bg-img-upload" title="Upload personalizado">
-              <span>＋</span>
+            <button class="champ-btn" data-champ="premier" title="Premier League"
+              style="--champ-color: linear-gradient(135deg, #3d195b, #ff2882)">
+              <span class="champ-name">Premier</span>
+            </button>
+            <button class="champ-btn" data-champ="ucl" title="Champions League"
+              style="--champ-color: linear-gradient(135deg, #0d1f5c, #00a1e4)">
+              <span class="champ-name">UCL</span>
+            </button>
+            <button class="champ-btn" data-champ="laliga" title="La Liga"
+              style="--champ-color: linear-gradient(135deg, #1a2248, #ff6900)">
+              <span class="champ-name">La Liga</span>
+            </button>
+            <button class="champ-btn" data-champ="serie-a" title="Serie A"
+              style="--champ-color: linear-gradient(135deg, #0a2a42, #02a86c)">
+              <span class="champ-name">Serie A</span>
+            </button>
+            <button class="champ-btn" data-champ="sulamericana" title="Copa Sudamericana"
+              style="--champ-color: linear-gradient(135deg, #401808, #e04428)">
+              <span class="champ-name">Sul-Americana</span>
+            </button>
+            <button class="champ-btn" data-champ="libertadores" title="Libertadores"
+              style="--champ-color: linear-gradient(135deg, #183a14, #d4a843)">
+              <span class="champ-name">Libertadores</span>
+            </button>
+            <button class="champ-btn" data-champ="copa-mundo" title="Copa do Mundo"
+              style="--champ-color: linear-gradient(135deg, #40122a, #d4af37)">
+              <span class="champ-name">Copa Mundo</span>
+            </button>
+            <button class="champ-btn" data-champ="copa-italia" title="Copa da Italia"
+              style="--champ-color: linear-gradient(135deg, #0c3018, #cd212a)">
+              <span class="champ-name">Copa Itália</span>
+            </button>
+            <button class="champ-btn" data-champ="copa-rey" title="Copa del Rey"
+              style="--champ-color: linear-gradient(135deg, #481818, #fabd00)">
+              <span class="champ-name">Copa del Rey</span>
+            </button>
+            <button class="champ-btn" data-champ="copa-brasil" title="Copa do Brasil"
+              style="--champ-color: linear-gradient(135deg, #004a18, #ffcc29)">
+              <span class="champ-name">Copa Brasil</span>
+            </button>
+            <button class="champ-btn" data-champ="europa" title="Europa League"
+              style="--champ-color: linear-gradient(135deg, #2a1a08, #f57a22)">
+              <span class="champ-name">Europa</span>
+            </button>
+          </div>
+          <div class="champ-upload-row">
+            <label class="btn btn-sm btn-ghost champ-upload-btn" title="Upload personalizado">
+              📁 Imagem personalizada
               <input type="file" accept="image/*" id="bgImgUpload" hidden />
             </label>
-          </div>
-        </div>
-
-        <!-- Tema de Cores (por campeonato) -->
-        <div class="bg-section">
-          <label>Tema de Cores</label>
-          <div class="bg-options">
-            <button class="bg-option active" data-bg="brasileirao" title="Brasileirão"
-              style="background: linear-gradient(135deg, #003d12, #f7d731)"></button>
-            <button class="bg-option" data-bg="paulista" title="Campeonato Paulista"
-              style="background: linear-gradient(135deg, #2d0a0a, #e02020)"></button>
-            <button class="bg-option" data-bg="premier" title="Premier League"
-              style="background: linear-gradient(135deg, #3d195b, #ff2882)"></button>
-            <button class="bg-option" data-bg="ucl" title="Champions League"
-              style="background: linear-gradient(135deg, #0d1f5c, #00a1e4)"></button>
-            <button class="bg-option" data-bg="laliga" title="La Liga"
-              style="background: linear-gradient(135deg, #1a2248, #ff6900)"></button>
-            <button class="bg-option" data-bg="serie-a" title="Serie A"
-              style="background: linear-gradient(135deg, #0a2a42, #02a86c)"></button>
-            <button class="bg-option" data-bg="sulamericana" title="Copa Sudamericana"
-              style="background: linear-gradient(135deg, #401808, #e04428)"></button>
-            <button class="bg-option" data-bg="libertadores" title="Libertadores"
-              style="background: linear-gradient(135deg, #183a14, #d4a843)"></button>
-            <button class="bg-option" data-bg="copa-mundo" title="Copa do Mundo"
-              style="background: linear-gradient(135deg, #40122a, #d4af37)"></button>
-            <button class="bg-option" data-bg="copa-italia" title="Copa da Italia"
-              style="background: linear-gradient(135deg, #0c3018, #cd212a)"></button>
-            <button class="bg-option" data-bg="copa-rey" title="Copa del Rey"
-              style="background: linear-gradient(135deg, #481818, #fabd00)"></button>
-            <button class="bg-option" data-bg="copa-brasil" title="Copa do Brasil"
-              style="background: linear-gradient(135deg, #004a18, #ffcc29)"></button>
-            <button class="bg-option" data-bg="europa" title="Europa League"
-              style="background: linear-gradient(135deg, #2a1a08, #f57a22)"></button>
           </div>
         </div>
 

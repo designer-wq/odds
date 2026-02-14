@@ -4,7 +4,7 @@
  */
 import { renderCanvas, formatDate } from './canvas-renderer.js';
 import { searchLocalTeams, addTeam, getTeams } from './teams-store.js';
-import bgStadiumUrl from './assets/bg-stadium.png';
+
 
 // ===== CONFIG =====
 const API_BASE = '/api/sports';
@@ -115,15 +115,9 @@ async function init() {
     // Restaurar título
     artTitle.value = state.title;
 
-    // Restaurar background ativo
-    document.querySelector('.bg-option.active')?.classList.remove('active');
-    document.querySelector(`.bg-option[data-bg="${state.background}"]`)?.classList.add('active');
-
-    // Restaurar imagem de fundo ativa
-    if (state.bgImageKey !== 'none') {
-        document.querySelector('.bg-img-option.active')?.classList.remove('active');
-        document.querySelector(`.bg-img-option[data-bgimg="${state.bgImageKey}"]`)?.classList.add('active');
-    }
+    // Restaurar campeonato ativo
+    document.querySelector('.champ-btn.active')?.classList.remove('active');
+    document.querySelector(`.champ-btn[data-champ="${state.background}"]`)?.classList.add('active');
 
     // Event listeners
     addGameBtn.addEventListener('click', addGame);
@@ -131,44 +125,48 @@ async function init() {
     artDate.addEventListener('change', onDateChange);
     artTitle.addEventListener('input', onTitleChange);
 
-    // Background options
-    document.querySelectorAll('.bg-option').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelector('.bg-option.active')?.classList.remove('active');
-            btn.classList.add('active');
-            state.background = btn.dataset.bg;
-            saveState();
-            render();
-        });
-    });
+    // ===== CAMPEONATO (BG + TEMA SINCRONIZADOS) =====
+    // Pré-carregar imagens de campeonato
+    state._presetImages = state._presetImages || {};
 
-    // ===== SELEÇÃO DE IMAGEM DE FUNDO =====
-    // Pré-carregar imagem do estádio
-    const stadiumImg = new Image();
-    stadiumImg.crossOrigin = 'anonymous';
-    stadiumImg.onload = () => {
-        state._presetImages = state._presetImages || {};
-        state._presetImages['stadium'] = stadiumImg;
-        // Se já estava selecionado, aplicar
-        if (state.bgImageKey === 'stadium') {
-            state.bgImageObj = stadiumImg;
-            render();
-        }
-    };
-    stadiumImg.src = bgStadiumUrl;
+    document.querySelectorAll('.champ-btn[data-champ]').forEach(btn => {
+        const champ = btn.dataset.champ;
 
-    // Botões de imagem de fundo (preset)
-    document.querySelectorAll('.bg-img-option[data-bgimg]').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelector('.bg-img-option.active')?.classList.remove('active');
-            btn.classList.add('active');
-            const key = btn.dataset.bgimg;
-            state.bgImageKey = key;
-            if (key === 'none') {
-                state.bgImageObj = null;
-            } else if (state._presetImages && state._presetImages[key]) {
-                state.bgImageObj = state._presetImages[key];
+        // Pré-carregar imagem do campeonato
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+            state._presetImages[champ] = img;
+            // Se já estava selecionado, aplicar
+            if (state.background === champ && !state.bgImageObj) {
+                state.bgImageObj = img;
+                state.bgImageKey = champ;
+                render();
             }
+        };
+        img.onerror = () => {
+            // Imagem não encontrada — funciona sem BG, só com tema de cor
+            console.warn(`BG image not found for: ${champ}`);
+        };
+        img.src = `/campeonatos/${champ}.png`;
+
+        // Click handler
+        btn.addEventListener('click', () => {
+            document.querySelector('.champ-btn.active')?.classList.remove('active');
+            btn.classList.add('active');
+
+            // Setar tema de cores
+            state.background = champ;
+
+            // Setar imagem de fundo (se existir)
+            if (state._presetImages[champ]) {
+                state.bgImageKey = champ;
+                state.bgImageObj = state._presetImages[champ];
+            } else {
+                state.bgImageKey = 'none';
+                state.bgImageObj = null;
+            }
+
             saveState();
             render();
         });
@@ -184,32 +182,6 @@ async function init() {
             img.onload = () => {
                 state.bgImageKey = 'custom';
                 state.bgImageObj = img;
-                // Atualizar UI
-                document.querySelector('.bg-img-option.active')?.classList.remove('active');
-                // Criar botão para a imagem custom se não existir
-                let customBtn = document.querySelector('.bg-img-option[data-bgimg="custom"]');
-                if (!customBtn) {
-                    customBtn = document.createElement('button');
-                    customBtn.className = 'bg-img-option';
-                    customBtn.dataset.bgimg = 'custom';
-                    customBtn.title = 'Personalizado';
-                    const thumbImg = document.createElement('img');
-                    thumbImg.src = evt.target.result;
-                    thumbImg.alt = 'Custom';
-                    customBtn.appendChild(thumbImg);
-                    customBtn.addEventListener('click', () => {
-                        document.querySelector('.bg-img-option.active')?.classList.remove('active');
-                        customBtn.classList.add('active');
-                        state.bgImageKey = 'custom';
-                        state.bgImageObj = img;
-                        saveState();
-                        render();
-                    });
-                    document.getElementById('bgImgOptions').insertBefore(customBtn, document.querySelector('.bg-img-upload'));
-                } else {
-                    customBtn.querySelector('img').src = evt.target.result;
-                }
-                customBtn.classList.add('active');
                 saveState();
                 render();
             };
