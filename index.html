@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ODD — Gerador de Arte de Jogos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/teams-style.css" />
+</head>
+
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo">
+        <span class="logo-icon">⚽</span>
+        <h1>ODD<span class="logo-sub">Generator</span></h1>
+      </div>
+      <nav class="header-nav">
+        <a href="/" class="nav-link active">🎨 Gerador</a>
+        <a href="/teams.html" class="nav-link">🛡️ Times</a>
+      </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Left Panel - Game Form -->
+      <section class="panel panel-left">
+        <div class="panel-header">
+          <h2>Jogos</h2>
+          <span class="game-counter" id="gameCounter">0/4</span>
+        </div>
+
+        <!-- Date Input -->
+        <div class="date-section">
+          <label for="artDate">Data da Arte</label>
+          <input type="date" id="artDate" />
+        </div>
+
+        <!-- Title Input -->
+        <div class="title-section">
+          <label for="artTitle">Título</label>
+          <textarea id="artTitle" rows="2" placeholder="JOGOS DO DIA">JOGOS DO DIA</textarea>
+        </div>
+
+        <!-- Background image -->
+        <div class="bg-section">
+          <label>Imagem de Fundo</label>
+          <div class="bg-img-options" id="bgImgOptions">
+            <button class="bg-img-option active" data-bgimg="none" title="Sem imagem">
+              <span class="bg-img-none">✕</span>
+            </button>
+            <button class="bg-img-option" data-bgimg="stadium" title="Estádio">
+              <img src="./assets/bg-stadium.png" alt="Estádio" />
+            </button>
+            <label class="bg-img-option bg-img-upload" title="Upload personalizado">
+              <span>＋</span>
+              <input type="file" accept="image/*" id="bgImgUpload" hidden />
+            </label>
+          </div>
+        </div>
+
+        <!-- Tema de Cores (por campeonato) -->
+        <div class="bg-section">
+          <label>Tema de Cores</label>
+          <div class="bg-options">
+            <button class="bg-option active" data-bg="brasileirao" title="Brasileirão"
+              style="background: linear-gradient(135deg, #003d12, #f7d731)"></button>
+            <button class="bg-option" data-bg="paulista" title="Campeonato Paulista"
+              style="background: linear-gradient(135deg, #2d0a0a, #e02020)"></button>
+            <button class="bg-option" data-bg="premier" title="Premier League"
+              style="background: linear-gradient(135deg, #3d195b, #ff2882)"></button>
+            <button class="bg-option" data-bg="ucl" title="Champions League"
+              style="background: linear-gradient(135deg, #0d1f5c, #00a1e4)"></button>
+            <button class="bg-option" data-bg="laliga" title="La Liga"
+              style="background: linear-gradient(135deg, #1a2248, #ff6900)"></button>
+            <button class="bg-option" data-bg="serie-a" title="Serie A"
+              style="background: linear-gradient(135deg, #0a2a42, #02a86c)"></button>
+            <button class="bg-option" data-bg="sulamericana" title="Copa Sudamericana"
+              style="background: linear-gradient(135deg, #401808, #e04428)"></button>
+            <button class="bg-option" data-bg="libertadores" title="Libertadores"
+              style="background: linear-gradient(135deg, #183a14, #d4a843)"></button>
+            <button class="bg-option" data-bg="copa-mundo" title="Copa do Mundo"
+              style="background: linear-gradient(135deg, #40122a, #d4af37)"></button>
+            <button class="bg-option" data-bg="copa-italia" title="Copa da Italia"
+              style="background: linear-gradient(135deg, #0c3018, #cd212a)"></button>
+            <button class="bg-option" data-bg="copa-rey" title="Copa del Rey"
+              style="background: linear-gradient(135deg, #481818, #fabd00)"></button>
+            <button class="bg-option" data-bg="copa-brasil" title="Copa do Brasil"
+              style="background: linear-gradient(135deg, #004a18, #ffcc29)"></button>
+            <button class="bg-option" data-bg="europa" title="Europa League"
+              style="background: linear-gradient(135deg, #2a1a08, #f57a22)"></button>
+          </div>
+        </div>
+
+        <!-- Games List -->
+        <div class="games-list" id="gamesList">
+          <!-- Games will be added here dynamically -->
+        </div>
+
+        <!-- Add Game Button -->
+        <button class="btn btn-add" id="addGameBtn">
+          <span class="btn-icon">+</span>
+          Adicionar Jogo
+        </button>
+      </section>
+
+      <!-- Right Panel - Preview -->
+      <section class="panel panel-right">
+        <div class="panel-header">
+          <h2>Preview</h2>
+          <button class="btn btn-export" id="exportBtn">
+            <span class="btn-icon">📥</span>
+            Exportar JPEG
+          </button>
+        </div>
+        <div class="canvas-wrapper">
+          <canvas id="artCanvas" width="1080" height="1920"></canvas>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Game Card Template -->
+  <template id="gameCardTemplate">
+    <div class="game-card" data-index="">
+      <div class="game-card-header">
+        <span class="game-number">Jogo <span class="game-num-val"></span></span>
+        <button class="btn-remove" title="Remover jogo">✕</button>
+      </div>
+      <div class="game-card-body">
+        <!-- Team A -->
+        <div class="team-row">
+          <div class="team-logo-upload">
+            <div class="logo-preview" data-team="a">
+              <span class="logo-placeholder">🏠</span>
+            </div>
+          </div>
+          <div class="team-info">
+            <div class="team-search-wrapper">
+              <input type="text" class="team-name-input" data-team="a" placeholder="Buscar time da casa..."
+                autocomplete="off" />
+              <div class="search-suggestions" data-team="a"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vs-divider">
+          <span>VS</span>
+        </div>
+
+        <!-- Team B -->
+        <div class="team-row">
+          <div class="team-logo-upload">
+            <div class="logo-preview" data-team="b">
+              <span class="logo-placeholder">✈️</span>
+            </div>
+          </div>
+          <div class="team-info">
+            <div class="team-search-wrapper">
+              <input type="text" class="team-name-input" data-team="b" placeholder="Buscar time visitante..."
+                autocomplete="off" />
+              <div class="search-suggestions" data-team="b"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Match Details -->
+        <div class="match-details">
+          <div class="detail-row">
+            <div class="detail-field">
+              <label>Horário</label>
+              <input type="time" class="match-time" />
+            </div>
+            <div class="detail-field">
+              <label>Campeonato</label>
+              <input type="text" class="match-league" placeholder="Ex: Brasileirão" />
+            </div>
+          </div>
+          <div class="odds-row">
+            <div class="odd-field">
+              <label>Casa</label>
+              <input type="text" class="odd-input" data-odd="home" placeholder="1.50" />
+            </div>
+            <div class="odd-field">
+              <label>Empate</label>
+              <input type="text" class="odd-input" data-odd="draw" placeholder="3.20" />
+            </div>
+            <div class="odd-field">
+              <label>Fora</label>
+              <input type="text" class="odd-input" data-odd="away" placeholder="2.10" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script type="module" src="/main.js"></script>
+</body>
+
+</html>

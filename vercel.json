@@ -1,0 +1,12 @@
+{
+    "rewrites": [
+        {
+            "source": "/api/sports/:path*",
+            "destination": "https://www.thesportsdb.com/api/v1/json/3/:path*"
+        },
+        {
+            "source": "/sports-img/:path*",
+            "destination": "https://r2.thesportsdb.com/:path*"
+        }
+    ]
+}
