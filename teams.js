@@ -154,7 +154,7 @@ function closeModal() {
     logoPreview.innerHTML = `<span class="upload-placeholder">🛡️</span>`;
 }
 
-function handleSave() {
+async function handleSave() {
     const name = teamNameInput.value.trim();
     if (!name) {
         teamNameInput.focus();
@@ -163,12 +163,22 @@ function handleSave() {
         return;
     }
 
-    if (editingTeamId) {
-        updateTeam(editingTeamId, { name, badge: logoDataUrl });
-    } else {
-        addTeam(name, logoDataUrl);
+    // Show loading state
+    modalSave.disabled = true;
+    modalSave.textContent = 'Salvando...';
+
+    try {
+        if (editingTeamId) {
+            await updateTeam(editingTeamId, { name, badge: logoDataUrl });
+        } else {
+            await addTeam(name, logoDataUrl);
+        }
+    } catch (err) {
+        console.error('Error saving team:', err);
     }
 
+    modalSave.disabled = false;
+    modalSave.textContent = 'Salvar';
     closeModal();
     renderTeams();
 }
