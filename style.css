@@ -352,24 +352,23 @@ body {
   gap: 10px;
 }
 
-/* ===== TEAM ROW ===== */
-.team-row {
-  display: flex;
-  align-items: center;
+/* ===== TEAMS ROW (side by side) ===== */
+.teams-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
 
-.team-logo-upload {
-  flex-shrink: 0;
-}
-
-.logo-label {
-  cursor: pointer;
+.team-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 }
 
 .logo-preview {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   border: 2px dashed var(--border-light);
   display: flex;
@@ -378,6 +377,7 @@ body {
   overflow: hidden;
   transition: all var(--transition);
   background: var(--bg-tertiary);
+  flex-shrink: 0;
 }
 
 .logo-preview:hover {
@@ -401,9 +401,9 @@ body {
   opacity: 0.5;
 }
 
-.team-info {
-  flex: 1;
-  min-width: 0;
+.team-search-wrapper {
+  position: relative;
+  width: 100%;
 }
 
 .team-name-input {
@@ -411,13 +411,14 @@ body {
   background: var(--bg-tertiary);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 8px 12px;
+  padding: 8px 10px;
   color: var(--text-primary);
   font-family: var(--font);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   transition: border-color var(--transition);
   outline: none;
+  text-align: center;
 }
 
 .team-name-input:focus {
@@ -425,11 +426,7 @@ body {
   box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
-/* ===== TEAM SEARCH ===== */
-.team-search-wrapper {
-  position: relative;
-  flex: 1;
-}
+
 
 .team-name-input.loading {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'%3E%3Cstyle%3E%40keyframes s%7Bto%7Btransform:rotate(360deg)%7D%7D%3C/style%3E%3Ccircle cx='12' cy='12' r='10' fill='none' stroke='%23f59e0b' stroke-width='2.5' stroke-dasharray='32 32' style='animation:s .8s linear infinite'/%3E%3C/svg%3E");
@@ -539,24 +536,7 @@ body {
   border-radius: 2px;
 }
 
-/* ===== VS DIVIDER ===== */
-.vs-divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2px 0;
-}
 
-.vs-divider span {
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--text-muted);
-  background: var(--bg-tertiary);
-  padding: 2px 16px;
-  border-radius: 20px;
-  letter-spacing: 2px;
-}
 
 /* ===== MATCH DETAILS ===== */
 .match-details {
@@ -841,9 +821,9 @@ body {
     gap: 8px;
   }
 
-  /* Team row stays side-by-side */
-  .team-row {
-    gap: 8px;
+  /* Teams side-by-side */
+  .teams-row {
+    gap: 6px;
   }
 
   .logo-preview {
